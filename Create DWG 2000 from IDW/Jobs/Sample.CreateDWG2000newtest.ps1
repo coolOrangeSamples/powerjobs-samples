@@ -10,22 +10,26 @@
 # OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.  #
 #=============================================================================#
 
+# Required in the powerJobs Settings Dialog to determine the entity type for lifecycle state change triggers
 # JobEntityType = FILE
 
 #region Settings
+# To include the Revision of the main file in the BMP name set Yes, otherwise No
+$bmpFileNameWithRevision = $true
 
-#hides dwg
-$hideDWG = $false
+# The character used to separate file name and Revision label in the BPM name such as hyphen (-) or underscore (_)
+$bmpFileNameRevisionSeparator = "7"
 
+# To include the file extension of the main file in the BMP name set Yes, otherwise No
+$bmpFileNameWithExtension = $true
+
+# Specify a Vault folder in which the BMP should be stored (e.g. $/Designs/BMP), or leave the setting empty to store the BMP next to the main file
+$bmpVaultFolder = ""
+
+# To enable faster opening of released Inventor drawings without downloading and opening their model files set Yes, otherwise No
+$openReleasedDrawingsFast = $true
 #endregion
-
-
-if (-not $IAmRunningInJobProcessor){
-    Import-Module powerJobs
-    OpenVaultConnection -server "localhost" -Vault "PDMC-Sample" -User "Administrator" -password ""
-    $file = Get-VaultFile -Properties @{"Name" = "01-0289.idw"}
-}
-
+$hideDWG = $false
 $workingDirectory = "C:\Temp\$($file._Name)"
 $localDWGfileLocation = "$workingDirectory\$($file._Name).dwg"
 $vaultDWGfileLocation = $file._EntityPath +"/"+ (split-path -Leaf $localDWGfileLocation)

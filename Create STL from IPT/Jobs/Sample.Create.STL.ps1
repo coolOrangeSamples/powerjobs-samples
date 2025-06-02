@@ -8,8 +8,21 @@
 # EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES #
 # OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.  #
 #=============================================================================#
+#JobEntityType = FILE
 
-$workingDirectory = "C:\Temp\$($file._Name)"
+#region Settings
+
+#new Working Drectory
+$workingDirectory = "C:\temp\coolOrange\STLFromIPT"
+
+#endRegion
+
+if (-not $IAmRunningInJobProcessor){
+    Import-Module powerJobs
+    OpenVaultConnection -server "localhost" -Vault "PDMC-Sample" -User "Administrator" -password ""
+    $file = Get-VaultFile -Properties @{"Name" = "Part1.ipt"} 
+}
+
 $localSTLfileLocation = "$workingDirectory\$($file._Name).STL"
 $vaultSTLfileLocation = $file._EntityPath + "/" + (Split-Path -Leaf $localSTLfileLocation)
 

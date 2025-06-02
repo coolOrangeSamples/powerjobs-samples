@@ -10,18 +10,32 @@
 # OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.  #
 #=============================================================================#
 
-if (-not $folder) {
-    $vaultFolder = "$/Designs/Inventor Sample Data/Models/Assemblies/Scissors" 
-} else {
-    $vaultFolder = $folder._FullPath
+
+#JobEntityType = FLDR
+
+#region Settings
+
+#Setting a new Working Directory
+$workingDirectory = "C:\Temp\Drawings"
+
+#Hide zip file
+$hideZIP = $false
+
+#endRegion
+ 
+
+if (-not $IAmRunningInJobProcessor){
+    Import-Module powerJobs
+    OpenVaultConnection -server "localhost" -Vault "PDMC-Sample" -User "Administrator" -password ""
+    $folder = Get-VaultFolder -Path "$/Designs/####" 
 }
+
+
+$vaultFolder = $folder._FullPath
 
 Add-Type -Path "C:\ProgramData\coolOrange\powerJobs\Modules\PdfSharp.dll"
 $files = Get-VaultFiles -Folder $vaultFolder
 $files = $files | Where-Object { $_.'File Extension' -Match "^(idw|dwg)" }
-$hideZIP = $false
-$workingDirectory = "C:\Temp\Drawings"
-
 Write-Host "Starting job '$($job.Name)' ..."
 
 if(!(Test-Path "$workingDirectory\Export")){

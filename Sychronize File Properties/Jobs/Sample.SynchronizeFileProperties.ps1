@@ -9,6 +9,11 @@
 # OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.  #
 #=============================================================================#
 
+# JobEntityType = FILE
+
+#region Settings
+#endregion
+
 Write-Host "Starting job '$($job.Name)' for file '$($file._Name)' ..."
 
 SyncProperties -file $file

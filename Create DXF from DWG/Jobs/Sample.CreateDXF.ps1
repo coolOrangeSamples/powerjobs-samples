@@ -9,6 +9,23 @@
 # OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.  #
 #=============================================================================#
 
+
+#JobEntityType = FILE
+
+#region Settings
+
+#setting a new Working Directory
+$workingDirectory = "C:\Temp\coolOrange"
+
+#endRegion
+ 
+
+if (-not $IAmRunningInJobProcessor){
+    Import-Module powerJobs
+    OpenVaultConnection -server "localhost" -Vault "PDMC-Sample" -User "Administrator" -password ""
+    $file = Get-VaultFile -Properties @{"Name" = "ISO A2 Layout ISO_TITLEA.dwg"}
+}
+
 $workingDirectory = "C:\Temp\$($file._Name)"
 $Title = $($file.Name).Substring(0,$($file.Name).LastIndexOf("."))
 $localPNGfileLocation = "$workingDirectory\$($Title).dxf"

@@ -9,9 +9,28 @@
 # OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.  #
 #=============================================================================#
 
+#JobEntityType = FILE
+
+#region Settings
+
+#Setting a new Working Directory
+$workingDirectory = "C:\Temp\coolOrange\PDFToUNC"
+
+#UNC Path
 $uncPath = "\\SERVER1\Share\Public\PDFs\"
 
+#Hides PDF
 $hidePDF = $false
+
+#endRegion
+
+
+if (-not $IAmRunningInJobProcessor){
+    Import-Module powerJobs
+    OpenVaultConnection -server "localhost" -Vault "PDMC-Sample" -User "Administrator" -password ""
+    $file = Get-VaultFile -Properties @{"Name" = "ISO A2 Layout ISO_TITLEA.dwg"} 
+}
+
 $workingDirectory = "C:\Temp\$($file._Name)"
 $localPDFfileLocation = "$workingDirectory\$($file._Name).pdf"
 $vaultPDFfileLocation = $file._EntityPath +"/"+ (Split-Path -Leaf $localPDFfileLocation)

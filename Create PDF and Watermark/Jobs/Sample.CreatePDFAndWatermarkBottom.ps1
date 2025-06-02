@@ -30,7 +30,15 @@ $OffsetY = 0
 $Angle = 0
 #endregion Settings
 
+if (-not $IAmRunningInJobProcessor){
+    Import-Module powerJobs
+    OpenVaultConnection -server "localhost" -Vault "PDMC-Sample" -User "Administrator" -password ""
+    $file = Get-VaultFile -Properties @{"Name" = "01-0289.idw"} 
+}
+
 Write-Host "Starting job '$($job.Name)' for file '$($file._Name)' ..."
+
+
 
 if ( @("idw") -notcontains $file._Extension ) {
 	Write-Host "Files with extension: '$($file._Extension)' are not supported"

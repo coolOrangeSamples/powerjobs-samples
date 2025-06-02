@@ -1,6 +1,18 @@
 
+#=============================================================================#
+# PowerShell script sample for coolOrange powerJobs                           #
+# Publishes a BOM based on XML template									      #
+#                                                                             #
+# Copyright (c) coolOrange s.r.l. - All rights reserved.                      #
+#                                                                             #
+# THIS SCRIPT/CODE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER   #
+# EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES #
+# OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.  #
+#=============================================================================#
+
 $ErrorActionPreference = "stop"
 # JobEntityType = ITEM
+
 #region Settings
 
 # Specify where the XML should be published (e.g. \\SERVERNAME\Share\Public\BOM push)
@@ -9,6 +21,12 @@ $xmlOutputFolder = "c:\temp\BOM push"
 $xmlTemplateFullPath = 'C:\ProgramData\coolOrange\powerJobs\Jobs\Sample.ItemBomPushToXmlTemplate.xml'
 
 #endregion
+
+if (-not $IAmRunningInJobProcessor){
+    Import-Module powerJobs
+    OpenVaultConnection -server "localhost" -Vault "PDMC-Sample" -User "Administrator" -password ""
+    $item = Get-VaultItem -Number "1000001"
+}
 
 New-Item -Path $xmlOutputFolder -ItemType Directory -Force
 

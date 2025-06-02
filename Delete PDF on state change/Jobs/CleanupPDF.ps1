@@ -8,10 +8,21 @@
 # EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES #
 # OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.  #
 #=============================================================================#
+#JobEntityType = FILE
 
+#region Settings
 
-#TODO: To copy the PDF to a network folder fill $networkFolder with the folder e.g. $networkFolder ="\\SERVER1\Share\Public\PDFs\"
-$networkFolder = "<YOUR PATH>"
+#To copy the PDF to a network folder fill $networkFolder with the folder e.g. $networkFolder ="\\SERVER1\Share\Public\PDFs\"
+$networkFolder = ""
+
+#endRegion
+
+if (-not $IAmRunningInJobProcessor){
+    Import-Module powerJobs
+    OpenVaultConnection -server "localhost" -Vault "PDMC-Sample" -User "Administrator" -password ""
+    $file = Get-VaultFile -Properties @{"Name" = "01-0289.idw"} 
+}
+
 $localPdfFileName = "$($file._Name).pdf"
 
 Write-Host "Starting job 'Cleanup PDF' for file '$($file._Name)' ..."

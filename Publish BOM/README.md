@@ -1,10 +1,10 @@
-# Create PDF from all Drawing Files
+# Publish Item BOM
 
-## Job Description
-Converts all drawings to PDF files. The DXF files are added to Vault as DesignVisualization in a pre-configured folder.
+## Description
+Extracts an Item BOM to a local XML.
 
 ## Benefit
-Automates mass PDF generation from Drawings.
+Automated export of Item BOM to XML
 
 ## Prerequisites
 powerJobs Client version 25.0 or later must be installed on the Vault Explorer Machine(s).

@@ -9,7 +9,27 @@
 # OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.  #
 #=============================================================================#
 
-$workingDirectory = "C:\Temp\$($file._Name)"
+
+#JobEntityType = FILE
+
+#region Settings
+#Valid values: Model, Layout, none
+$excludeModelOrLayout = "Model"
+
+#new Working Drectory
+$workingDirectory = "C:\temp\coolOrange\SATFile"
+
+#Hides PDF
+$hidePDF = $false
+
+#endRegion
+
+if (-not $IAmRunningInJobProcessor){
+    Import-Module powerJobs
+    OpenVaultConnection -server "localhost" -Vault "PDMC-Sample" -User "Administrator" -password ""
+    $file = Get-VaultFile -Properties @{"Name" = "Part1.ipt"} 
+}
+
 $localSATfileLocation = "$workingDirectory\$($file._Name).SAT"
 $vaultSATfileLocation = $file._EntityPath + "/" + (Split-Path -Leaf $localSATfileLocation)
 

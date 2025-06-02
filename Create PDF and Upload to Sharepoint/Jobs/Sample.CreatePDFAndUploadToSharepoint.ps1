@@ -10,18 +10,39 @@
 #=================================================================================#
 
 # Install-Module -Name SharePointPnPPowerShellOnline -RequiredVersion 3.2.1810.0
+#JobEntityType = FILE
+
+#region Settings
+
+#Sharepoint login Username
+$Username = ""
+#Sharepoint login PW
+$Password = ""
+
+# Link of your Sharepoint site
+$Site = ""
+# Folder you want to safe the files
+$Folder = ""
+#Setting a new Working Directory
+$workingDirectory = "C:\Temp\coolOrange"
+
+#Hide PDF
+$hidePDF = $false
+
+
+#endRegion
+$Password = ConvertTo-SecureString -String $Password -AsPlainText -Force
+
+if (-not $IAmRunningInJobProcessor){
+    Import-Module powerJobs
+    OpenVaultConnection -server "localhost" -Vault "PDMC-Sample" -User "Administrator" -password ""
+    $file = Get-VaultFile -Properties @{"Name" = "ISO A2 Layout ISO_TITLEA.dwg"} 
+}
 
 # Please enter username and password to access your Sharepoint site
-$Username = ""
-$Password = ConvertTo-SecureString -String "" -AsPlainText -Force
-[System.Management.Automation.PSCredential]$PSCredentials  = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList ($Username, $Password)
-# Please enter the link of your Sharepoint site
-$Site = ""
-# Please enter in which folder you want to safe the files
-$Folder = ""
 
-$hidePDF = $false
-$workingDirectory = "C:\Temp\$($file._Name)"
+[System.Management.Automation.PSCredential]$PSCredentials  = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList ($Username, $Password)
+
 $localPDFfileLocation = "$workingDirectory\$($file._Name).pdf"
 $vaultPDFfileLocation = $file._EntityPath +"/"+ (Split-Path -Leaf $localPDFfileLocation)
 $fastOpen = $file._Extension -eq "idw" -or $file._Extension -eq "dwg" -and $file._ReleasedRevision

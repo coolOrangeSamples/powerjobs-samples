@@ -9,7 +9,20 @@
 # OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.  #
 #=============================================================================#
 
-$workingDirectory = "C:\Temp\PDF of an Item"
+#JobEntityType = FLDR
+
+#region Settings
+
+#Setting a new Working Directory
+$workingDirectory = "C:\temp\coolOrange\PDF of an Item"
+
+#endRegion
+ 
+
+if (-not $IAmRunningInJobProcessor){
+    Import-Module powerJobs
+    OpenVaultConnection -server "localhost" -Vault "PDMC-Sample" -User "Administrator" -password ""
+}
 
 Write-Host "Starting job '$($job.Name)' ..."
 

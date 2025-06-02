@@ -2,6 +2,16 @@
 # EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES #
 # OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.  #
 #=============================================================================#
+
+# JobEntityType = FILE
+
+#region Settings
+
+#Specifies whether to hide pdf
+$hidePDF = $false
+
+#endregion
+
 #using Vault API to get the file instead of using powerVault's $file since it runs into property sync job not finding any equivalence problems when '$file.Name' or '$file._Name' is used
 $fileForSyncJob = $vault.DocumentService.GetFileById($file.Id)
 
@@ -44,7 +54,7 @@ if ($jobOutcome -eq "Failure")
 Write-Host "Finished Updating Revision Block"
 
 $hidePDF = $false
-$workingDirectory = "C:\Temp\$($file._Name)"
+
 $localPDFfileLocation = "$workingDirectory\$($file._Name).pdf"
 $vaultPDFfileLocation = $file._EntityPath +"/"+ (Split-Path -Leaf $localPDFfileLocation)
 $fastOpen = $file._Extension -eq "idw" -or $file._Extension -eq "dwg" -and $file._ReleasedRevision

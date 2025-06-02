@@ -10,9 +10,24 @@
 # OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.  #
 #=============================================================================#
 
-$vaultfolder = "$/Designs/DXF"
+#JobEntityType = FLDR
+
+#region Settings
+
+#setting a new Working Directory
 $workingDirectory = "C:\Temp\DXF"
+
+#endRegion
  
+
+if (-not $IAmRunningInJobProcessor){
+    Import-Module powerJobs
+    OpenVaultConnection -server "localhost" -Vault "PDMC-Sample" -User "Administrator" -password ""
+    $folder = Get-VaultFolder -Properties @{"Name" = "DXF"}
+}
+
+
+
 if(!(Test-Path "$workingDirectory")){
     New-Item -Path "$workingDirectory" -ItemType Directory
 }

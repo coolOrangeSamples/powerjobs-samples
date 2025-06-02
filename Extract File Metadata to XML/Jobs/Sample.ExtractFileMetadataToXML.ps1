@@ -9,6 +9,21 @@
 # OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.  #
 # ============================================================================#
 
+#JobEntityType = FILE
+
+#region Settings
+
+#Setting a new Working Directory
+$workingDirectory = "C:\temp\coolOrange\metadatatojson"
+
+#endRegion
+
+if (-not $IAmRunningInJobProcessor){
+    Import-Module powerJobs
+    OpenVaultConnection -server "localhost" -Vault "PDMC-Sample" -User "Administrator" -password ""
+    $file = Get-VaultFile -Properties @{"Name" = "ISO A2 Layout ISO_TITLEA.dwg"} 
+}
+
 $workingDirectory = "C:\Temp\$($file._Name).xml"
 [xml]$document = New-Object System.Xml.XmlDocument
 
