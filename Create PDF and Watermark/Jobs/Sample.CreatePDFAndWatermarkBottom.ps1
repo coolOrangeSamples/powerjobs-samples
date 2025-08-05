@@ -28,12 +28,14 @@ $Opacity = 50
 $OffsetX = -2
 $OffsetY = 0
 $Angle = 0
+$FontType = "Arial"
+$FontStyle = "Regular" # Regular, Bold, Italic, BoldItalic, Underline, Strikeout
 #endregion Settings
 
-if (-not $IAmRunningInJobProcessor){
-    Import-Module powerJobs
-    OpenVaultConnection -server "localhost" -Vault "PDMC-Sample" -User "Administrator" -password ""
-    $file = Get-VaultFile -Properties @{"Name" = "01-0289.idw"} 
+if (-not $IAmRunningInJobProcessor) {
+	Import-Module powerJobs
+	OpenVaultConnection -server "localhost" -Vault "PDMC-Sample" -User "Administrator" -password ""
+	$file = Get-VaultFile -Properties @{"Name" = "01-0289.idw" }
 }
 
 Write-Host "Starting job '$($job.Name)' for file '$($file._Name)' ..."
@@ -91,20 +93,36 @@ if ($openResult) {
 		$configFile = "$($env:POWERJOBS_MODULESDIR)Export\PDF.dwg"
 	}
 	$exportResult = Export-Document -Format 'PDF' -To $localPDFfileLocation -Options $configFile
+	$closeResult = Close-Document
 
-	try {
-		$text = $file._State
-		Add-WaterMark -Path $localPDFfileLocation -WaterMark $text -Angle $Angle -HorizontalAlignment $HorizontalAlignment -VerticalAlignment $VerticalAlignment -Color $Color -Opacity $Opacity -FontSize $FontSize -OffSetX $OffsetX -OffSetY $OffsetY
+	$text = $file._State
+	$process = Start-Process -FilePath "$($env:POWERJOBS_MODULESDIR)\PdfWatermarkConsole\coolOrange.Pdf.Watermark.Console.exe" -ArgumentList @(
+		"--path=`"$localPDFfileLocation`""
+		"--waterMarkText=$text"
+		"--angle=$Angle"
+		"--horizontalAlignment=$HorizontalAlignment"
+		"--verticalAlignment=$VerticalAlignment"
+		"--fontSize=$FontSize"
+		"--offsetX=$OffsetX"
+		"--offsetY=$OffsetY"
+		"--fontType=$FontType"
+		"--fontColor=$Color"
+		"--opacity=$Opacity "
+		"--fontStyle=$FontStyle"
+	) -PassThrough -Wait
+	$timer = 0
+	while (-not $process.HasExited -and $timer -lt 120) {
+		Start-Sleep -Seconds 1
+		$timer++
 	}
-	catch [System.Exception] {
-		throw($error[0])
+	if ($process.ExitCode -eq 1) {
+		throw "Add watermark failed!"
 	}
 
 	if ($exportResult) {
 		$PDFfile = Add-VaultFile -From $localPDFfileLocation -To $vaultPDFfileLocation -FileClassification DesignVisualization -Hidden $hidePDF
 		$file = Update-VaultFile -File $file._FullPath -AddAttachments @($PDFfile._FullPath)
 	}
-	$closeResult = Close-Document
 }
 
 if (-not $openResult) {

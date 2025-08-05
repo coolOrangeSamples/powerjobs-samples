@@ -29,12 +29,14 @@ $Opacity = 100
 $OffsetX = -2
 $OffsetY = 15
 $Angle = 170
+$FontType = "Arial"
+$FontStyle = "Regular" # Regular, Bold, Italic, BoldItalic, Underline, Strikeout
 #endregion Settings
 
-if (-not $IAmRunningInJobProcessor){
-    Import-Module powerJobs
-    OpenVaultConnection -server "localhost" -Vault "PDMC-Sample" -User "Administrator" -password ""
-    $file = Get-VaultFile -Properties @{"Name" = "ISO A2 Layout ISO_TITLEA.dwg"} 
+if (-not $IAmRunningInJobProcessor) {
+	Import-Module powerJobs
+	OpenVaultConnection -server "localhost" -Vault "PDMC-Sample" -User "Administrator" -password ""
+	$file = Get-VaultFile -Properties @{"Name" = "ISO A2 Layout ISO_TITLEA.dwg" }
 }
 
 Write-Host "Starting job '$($job.Name)' for file '$($file._Name)' ..."
@@ -43,12 +45,6 @@ if ( @("idw", "dwg") -notcontains $file._Extension ) {
 	Write-Host "Files with extension: '$($file._Extension)' are not supported"
 	return
 }
-
-# Preloading the modules is required as PDFsharp 6.1.1 attempts to load the .NET stanard version of System.Runtime.CompilerServices.Unsafe.dll, wich causes errors in .NET Framework. v4 directory contains .NET Framework version of System.Runtime.CompilerServices.Unsafe.dll
-Get-ChildItem -LiteralPath "$env:POWERJOBS_MODULESDIR\PDFWatermark" -Filter '*.dll' -Recurse | ForEach-Object {
-	$null = [System.Reflection.Assembly]::LoadFile($_.FullName)
-}
-Import-Module ("$env:POWERJOBS_MODULESDIR\PDFWatermark\coolOrange.Pdf.WaterMark.dll")
 
 $downloadedFiles = Save-VaultFile -File $file._FullPath -DownloadDirectory $workingDirectory -ExcludeChildren:$fastOpen -ExcludeLibraryContents:$fastOpen
 $file = $downloadedFiles | Select-Object -First 1
@@ -62,21 +58,36 @@ if ($openResult) {
 		$configFile = "$($env:POWERJOBS_MODULESDIR)Export\PDF.dwg"
 	}
 	$exportResult = Export-Document -Format 'PDF' -To $localPDFfileLocation -Options $configFile
+	$closeResult = Close-Document
 
-	try {
-		$text = $file._State
-		Add-WaterMark -Path $localPDFfileLocation -WaterMark $text -FontSize $FontSize -Angle $Angle -HorizontalAlignment $HorizontalAlignment -VerticalAlignment $VerticalAlignment -Color $Color -Opacity $Opacity -OffSetX $OffsetX -OffSetY $OffsetY
+	$text = $file._State
+	$process = Start-Process -FilePath "$($env:POWERJOBS_MODULESDIR)\PdfWatermarkConsole\coolOrange.Pdf.Watermark.Console.exe" -ArgumentList @(
+		"--path=`"$localPDFfileLocation`""
+		"--waterMarkText=$text"
+		"--angle=$Angle"
+		"--horizontalAlignment=$HorizontalAlignment"
+		"--verticalAlignment=$VerticalAlignment"
+		"--fontSize=$FontSize"
+		"--offsetX=$OffsetX"
+		"--offsetY=$OffsetY"
+		"--fontType=$FontType"
+		"--fontColor=$Color"
+		"--opacity=$Opacity "
+		"--fontStyle=$FontStyle"
+	) -PassThrough -Wait
+	$timer = 0
+	while (-not $process.HasExited -and $timer -lt 120) {
+		Start-Sleep -Seconds 1
+		$timer++
 	}
-	catch [System.Exception] {
-		throw($error[0])
+	if ($process.ExitCode -eq 1) {
+		throw "Add watermark failed!"
 	}
-
 
 	if ($exportResult) {
 		$PDFfile = Add-VaultFile -From $localPDFfileLocation -To $vaultPDFfileLocation -FileClassification DesignVisualization -Hidden $hidePDF
 		$file = Update-VaultFile -File $file._FullPath -AddAttachments @($PDFfile._FullPath)
 	}
-	$closeResult = Close-Document
 }
 
 if (-not $openResult) {
