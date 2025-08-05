@@ -47,12 +47,6 @@ if ( @("idw") -notcontains $file._Extension ) {
 	return
 }
 
-# Preloading the modules is required as PDFsharp 6.1.1 attempts to load the .NET stanard version of System.Runtime.CompilerServices.Unsafe.dll, wich causes errors in .NET Framework. v4 directory contains .NET Framework version of System.Runtime.CompilerServices.Unsafe.dll
-Get-ChildItem -LiteralPath "$env:POWERJOBS_MODULESDIR\PDFWatermark" -Filter '*.dll' -Recurse | ForEach-Object {
-	$null = [System.Reflection.Assembly]::LoadFile($_.FullName)
-}
-Import-Module ("$env:POWERJOBS_MODULESDIR\PDFWatermark\coolOrange.Pdf.WaterMark.dll")
-
 $downloadedFiles = Save-VaultFile -File $file._FullPath -DownloadDirectory $workingDirectory -ExcludeChildren:$fastOpen -ExcludeLibraryContents:$fastOpen
 $file = $downloadedFiles | Select-Object -First 1
 $openResult = Open-Document -LocalFile $file.LocalPath -Options @{ FastOpen = $fastOpen }
@@ -109,7 +103,7 @@ if ($openResult) {
 		"--fontColor=$Color"
 		"--opacity=$Opacity "
 		"--fontStyle=$FontStyle"
-	) -PassThrough -Wait
+	) -PassThru -Wait
 	$timer = 0
 	while (-not $process.HasExited -and $timer -lt 120) {
 		Start-Sleep -Seconds 1

@@ -74,7 +74,7 @@ if ($openResult) {
 		"--fontColor=$Color"
 		"--opacity=$Opacity "
 		"--fontStyle=$FontStyle"
-	) -PassThrough -Wait
+	) -PassThru -Wait
 	$timer = 0
 	while (-not $process.HasExited -and $timer -lt 120) {
 		Start-Sleep -Seconds 1
