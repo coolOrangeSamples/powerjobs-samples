@@ -31,12 +31,6 @@ $OffsetY = 15
 $Angle = 170
 #endregion Settings
 
-if (-not $IAmRunningInJobProcessor) {
-	Import-Module powerJobs
-	OpenVaultConnection -server "localhost" -Vault "PDMC-Sample" -User "Administrator" -password ""
-	$file = Get-VaultFile -Properties @{"Name" = "ISO A2 Layout ISO_TITLEA.dwg" }
-}
-
 Write-Host "Starting job '$($job.Name)' for file '$($file._Name)' ..."
 
 if ( @("idw", "dwg") -notcontains $file._Extension ) {
@@ -58,7 +52,7 @@ if ($openResult) {
 	$exportResult = Export-Document -Format 'PDF' -To $localPDFfileLocation -Options $configFile
 	$closeResult = Close-Document
 
-	Import-Module ("$env:POWERJOBS_MODULESDIR\PDFWatermark\coolOrange.Pdf.WaterMark.dll")
+	Import-Module "$env:POWERJOBS_MODULESDIR\PDFWatermark\coolOrange.Pdf.WaterMark.dll"
 	Add-WaterMark -Path $localPDFfileLocation -WaterMark $file._State -FontSize $FontSize -Angle $Angle -HorizontalAlignment $HorizontalAlignment -VerticalAlignment $VerticalAlignment -Color $FontColor -Opacity $Opacity -OffSetX $OffsetX -OffSetY $OffsetY
 
 	if ($exportResult) {

@@ -30,12 +30,6 @@ $OffsetY = 0
 $Angle = 0
 #endregion Settings
 
-if (-not $IAmRunningInJobProcessor){
-    Import-Module powerJobs
-    OpenVaultConnection -server "localhost" -Vault "PDMC-Sample" -User "Administrator" -password ""
-    $file = Get-VaultFile -Properties @{"Name" = "01-0289.idw"} 
-}
-
 Write-Host "Starting job '$($job.Name)' for file '$($file._Name)' ..."
 
 
@@ -44,12 +38,6 @@ if ( @("idw") -notcontains $file._Extension ) {
 	Write-Host "Files with extension: '$($file._Extension)' are not supported"
 	return
 }
-
-# Preloading the modules is required as PDFsharp 6.1.1 attempts to load the .NET stanard version of System.Runtime.CompilerServices.Unsafe.dll, wich causes errors in .NET Framework. v4 directory contains .NET Framework version of System.Runtime.CompilerServices.Unsafe.dll
-Get-ChildItem -LiteralPath "$env:POWERJOBS_MODULESDIR\PDFWatermark" -Filter '*.dll' -Recurse | ForEach-Object {
-	$null = [System.Reflection.Assembly]::LoadFile($_.FullName)
-}
-Import-Module ("$env:POWERJOBS_MODULESDIR\PDFWatermark\coolOrange.Pdf.WaterMark.dll")
 
 $downloadedFiles = Save-VaultFile -File $file._FullPath -DownloadDirectory $workingDirectory -ExcludeChildren:$fastOpen -ExcludeLibraryContents:$fastOpen
 $file = $downloadedFiles | Select-Object -First 1
@@ -91,20 +79,15 @@ if ($openResult) {
 		$configFile = "$($env:POWERJOBS_MODULESDIR)Export\PDF.dwg"
 	}
 	$exportResult = Export-Document -Format 'PDF' -To $localPDFfileLocation -Options $configFile
+	$closeResult = Close-Document
 
-	try {
-		$text = $file._State
-		Add-WaterMark -Path $localPDFfileLocation -WaterMark $text -Angle $Angle -HorizontalAlignment $HorizontalAlignment -VerticalAlignment $VerticalAlignment -Color $Color -Opacity $Opacity -FontSize $FontSize -OffSetX $OffsetX -OffSetY $OffsetY
-	}
-	catch [System.Exception] {
-		throw($error[0])
-	}
+	Import-Module "$env:POWERJOBS_MODULESDIR\PDFWatermark\coolOrange.Pdf.WaterMark.dll"
+	Add-WaterMark -Path $localPDFfileLocation -WaterMark $file._State -Angle $Angle -HorizontalAlignment $HorizontalAlignment -VerticalAlignment $VerticalAlignment -Color $Color -Opacity $Opacity -FontSize $FontSize -OffSetX $OffsetX -OffSetY $OffsetY
 
 	if ($exportResult) {
 		$PDFfile = Add-VaultFile -From $localPDFfileLocation -To $vaultPDFfileLocation -FileClassification DesignVisualization -Hidden $hidePDF
 		$file = Update-VaultFile -File $file._FullPath -AddAttachments @($PDFfile._FullPath)
 	}
-	$closeResult = Close-Document
 }
 
 if (-not $openResult) {
