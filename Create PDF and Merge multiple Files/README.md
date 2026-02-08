@@ -4,7 +4,7 @@
 Creates PDF files from drawings in a folder that needs to be specified and combines all created PDF files into one single PDF file. This file will be added to Vault as DesignVisualization file.
 
 ## Benefit
-Cleanly adds all files to a single DesignVisualization file, which could be cumbersome and is immune to error.
+Cleanly adds all files to a single DesignVisualization file, eliminating a process that could be cumbersome and error-prone.
 
 ## Prerequisites
 powerJobs Client version 25.0 or later must be installed on the Vault Explorer Machine(s).

@@ -4,7 +4,7 @@
 Extracts an Item BOM to a local XML.
 
 ## Benefit
-Automated export of Item BOM to XML
+Automated export of Item BOM to XML.
 
 ## Prerequisites
 powerJobs Client version 25.0 or later must be installed on the Vault Explorer Machine(s).

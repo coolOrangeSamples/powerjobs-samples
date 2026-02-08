@@ -4,7 +4,7 @@
 Converts an Inventor drawing to an AutoCAD drawing (Version: DWG2000) and adds it to Vault as DesignVisualization.
 
 ## Benefit
-Allows transformation of file type on request, allowing Inventor workflows to interact properly with AutoCAD centric workflows.d
+Allows transformation of file type on request, allowing Inventor workflows to interact properly with AutoCAD-centric workflows.
 
 ## Prerequisites
 powerJobs Client version 25.0 or later must be installed on the Vault Explorer Machine(s).

@@ -1,7 +1,7 @@
 # Create PDF from all Drawing Files
 
-## Job Description
-Converts all drawings to PDF files. The DXF files are added to Vault as DesignVisualization in a pre-configured folder.
+## Description
+Converts all drawings to PDF files. The PDF files are added to Vault as DesignVisualization in a pre-configured folder.
 
 ## Benefit
 Automates mass PDF generation from Drawings.

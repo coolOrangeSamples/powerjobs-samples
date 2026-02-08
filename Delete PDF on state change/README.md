@@ -1,6 +1,6 @@
 # Delete PDF on state change
 
-## Job Description
+## Description
 Deletes a PDF file from a local or network drive when the origin file state changes. This is typically needed when the file gets revised.
 
 ## Benefit

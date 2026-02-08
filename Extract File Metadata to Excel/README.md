@@ -1,6 +1,6 @@
 # Extract File Metadata to Excel
 
-## Job Description
+## Description
 Extracts the metadata for a given file and exports it to a local Excel file.
 
 ## Benefit

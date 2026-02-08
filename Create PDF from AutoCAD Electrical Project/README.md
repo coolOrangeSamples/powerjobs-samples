@@ -1,7 +1,7 @@
 # Create PDF from AutoCAD Electrical Project using DWGTrueView
 
 ## Description
-Downloads the ACADE project file, reads all containing DWG files, converts PDF files from the single DWGs and merges all PDF files into one single PDF file. The single PDF file is added to Vault as DesignVisualization and attached to the AutoCAD Electical project.
+Downloads the ACADE project file, reads all containing DWG files, converts PDF files from the single DWGs and merges all PDF files into one single PDF file. The single PDF file is added to Vault as DesignVisualization and attached to the AutoCAD Electrical project.
 
 ## Limitations
 DWGTrueView is used to convert DWG to PDF. No links are available in the PDF files.

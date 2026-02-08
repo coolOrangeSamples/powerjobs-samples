@@ -1,10 +1,10 @@
 # Create PDF and Upload to WeTransfer
 
-## Job Description
+## Description
 Creates a PDF file from a drawing and adds it to WeTransfer.
 
-## Benefits
-Generats a PDF from a drawing and remotely transfers it to WeTransfer and generates a share link.
+## Benefit
+Generates a PDF from a drawing and remotely transfers it to WeTransfer and generates a share link.
 
 ## Prerequisites
 powerJobs Client version 25.0 or later must be installed on the Vault Explorer Machine(s).

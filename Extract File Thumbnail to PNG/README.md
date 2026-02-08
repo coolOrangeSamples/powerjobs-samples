@@ -4,7 +4,7 @@
 Extracts the thumbnail for a given file and exports it to a local image file (PNG).
 
 ## Benefit
-Automated export of thumbnail to a PNG
+Automated export of thumbnail to a PNG.
 
 ## Prerequisites
 powerJobs Client version 25.0 or later must be installed on the Vault Explorer Machine(s).

@@ -3,7 +3,7 @@
 ## Description
 Creates a PDF file from a drawing and either the Models space or the Layouts can be excluded.
 
-## Benefits
+## Benefit
 Allows flexible PDF file generation from drawings within Vault.
 
 ## Prerequisites

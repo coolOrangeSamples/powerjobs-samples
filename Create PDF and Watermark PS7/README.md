@@ -1,8 +1,8 @@
-# Create PDF and Watermark at the buttom right
+# Create PDF and Watermark (PowerShell 7)
 
 ## Description
 Sample.CreatePDFAndWatermark: Creates a PDF file from a drawing and adds a watermark in the middle of the drawing.
-Sample.CreatePDFAndWatermarkBottom: Creates a PDF file from a drawing and adds a watermark on the botton right corner.
+Sample.CreatePDFAndWatermarkBottom: Creates a PDF file from a drawing and adds a watermark on the bottom right corner.
 
 ## Benefit
 Adds watermarks and ensures proper uniformity in placement between files.

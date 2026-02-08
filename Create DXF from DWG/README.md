@@ -1,7 +1,7 @@
 # Create DXF from DWG (using AutoCAD Core Console)
 
-## Job Description
-Converts an AutoCAD DWG file to DXF and adds the DWF to Vault. Unlike the pre-delivered sample job of powerJobs, this job uses AutoCAD Core Console to do the conversation.
+## Description
+Converts an AutoCAD DWG file to DXF and adds the DXF to Vault. Unlike the pre-delivered sample job of powerJobs, this job uses AutoCAD Core Console to do the conversion.
 
 ## Benefit
 Allows seamless filetype conversion and automatically loads it into Vault.

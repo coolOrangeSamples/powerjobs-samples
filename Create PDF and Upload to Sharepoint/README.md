@@ -1,10 +1,10 @@
-# Create PDF and Upload to Sharepoint
+# Create PDF and Upload to SharePoint
 
 ## Description
-Creates a PDF file from a drawing and adds it to a Sharepoint folder.
+Creates a PDF file from a drawing and adds it to a SharePoint folder.
 
-## Benefits
-Allows you to remotely generate a file and add it to a set Sharepoint folder.
+## Benefit
+Allows you to remotely generate a file and add it to a set SharePoint folder.
 
 ## Prerequisites
 powerJobs Client version 25.0 or later must be installed on the Vault Explorer Machine(s).
